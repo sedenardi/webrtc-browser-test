@@ -41,7 +41,7 @@ var meter = document.getElementById('volumeMeter');
 var browserTest = WebRtcBrowserTest({
   mediaElementContainer: '#mediaContainer',
   onVolumeChange: function(level) {
-    console.log(level);
+    // console.log(level);
     var pct = Math.ceil(level * 100);
     meter.style.width = pct + '%';
   }

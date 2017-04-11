@@ -79,9 +79,11 @@
       });
     };
 
+
     const createVolumeListener = function(audioContext, cb) {
       const processor = audioContext.createScriptProcessor(2048, 1, 1);
       processor.connect(audioContext.destination);
+      let movingAvg = null;
       processor.onaudioprocess = function(event) {
         const data = event.inputBuffer.getChannelData(0);
         let i = 0;
@@ -90,7 +92,17 @@
           total += Math.abs(data[i++]);
         }
         const rms = Math.sqrt(total / data.length);
-        if (cb) { cb(rms); }
+
+        if (movingAvg === null || movingAvg < rms) {
+          movingAvg = rms;
+        } else {
+          movingAvg = 0.7 * movingAvg + 0.3 * rms;
+        }
+
+        let logLevel = (Math.log(movingAvg) / Math.LN10) / 1.5 + 1;
+        logLevel = Math.min(Math.max(logLevel, 0), 1);
+
+        if (cb) { cb(logLevel); }
       };
       return processor;
     };
