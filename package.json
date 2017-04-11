@@ -12,5 +12,22 @@
   "bugs": {
     "url": "https://github.com/sedenardi/webrtc-browser-test/issues"
   },
-  "homepage": "https://github.com/sedenardi/webrtc-browser-test"
+  "homepage": "https://github.com/sedenardi/webrtc-browser-test",
+  "devDependencies": {
+    "babel-eslint": "^7.2.1",
+    "babel-preset-es2015": "^6.24.1",
+    "eslint": "^3.19.0",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-eslint": "^3.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.1.2",
+    "http-server": "^0.9.0"
+  },
+  "scripts": {
+    "devServer": "http-server -c-1",
+    "gulp": "gulp",
+    "watch": "gulp watch & npm run devServer",
+    "demo": "http-server -o"
+  }
 }
