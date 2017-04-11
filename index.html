@@ -26,9 +26,9 @@
     <div id="app">
       <h1>WebRTC Browser Test Demo</h1>
       <p>
-        <div id="message">
+        <pre id="message">
 
-        </div>
+        </pre>
         <div id="mediaContainer">
         </div>
         <div id="volumeMeterContainer">
@@ -37,15 +37,26 @@
       </p>
     </div>
     <script type="text/javascript">
-var meter = document.getElementById('volumeMeter');
-var browserTest = WebRtcBrowserTest({
-  mediaElementContainer: '#mediaContainer',
-  onVolumeChange: function(level) {
-    // console.log(level);
-    var pct = Math.ceil(level * 100);
-    meter.style.width = pct + '%';
-  }
-});
+var message = document.getElementById('message');
+try {
+  var meter = document.getElementById('volumeMeter');
+  var browserTest = WebRtcBrowserTest({
+    mediaElementContainer: '#mediaContainer',
+    onVolumeChange: function(level) {
+      var pct = Math.ceil(level * 100);
+      meter.style.width = pct + '%';
+    }
+  });
+  browserTest.startAll().then(function() {
+    console.log('started');
+  }).catch(function(err) {
+    message.innerHTML = err.name + '\n' + err.message;
+    console.log(err);
+  });
+} catch(err) {
+  message.innerHTML = err.name + '\n' + err.message;
+  console.log(err);
+}
     </script>
   </body>
 </html>

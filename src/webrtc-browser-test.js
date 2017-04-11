@@ -1,10 +1,40 @@
 (function() {
 
-  const customError = function(name, message) {
-    const e = new Error(message);
-    e.name = name;
-    return e;
+  const ParameterError = function(message) {
+    this.name = 'ParameterError';
+    this.message = (message || '');
   };
+  ParameterError.prototype = Error.prototype;
+
+  const BrowserNotSupportedError = function(message) {
+    this.name = 'BrowserNotSupportedError';
+    this.message = (message || '');
+  };
+  BrowserNotSupportedError.prototype = Error.prototype;
+
+  const VideoNotFoundError = function(message) {
+    this.name = 'VideoNotFoundError';
+    this.message = (message || 'Unable to detect a video camera. Please ensure you\'ve installed and tested your webcam.');
+  };
+  VideoNotFoundError.prototype = Error.prototype;
+
+  const VideoDeniedError = function(message) {
+    this.name = 'VideoDeniedError';
+    this.message = (message || 'Your browser is preventing access to your camera and microphone. Please check your browser settings (usually an icon in the address bar) to enable access.');
+  };
+  VideoDeniedError.prototype = Error.prototype;
+
+  const AudioNotFoundError = function(message) {
+    this.name = 'AudioNotFoundError';
+    this.message = (message || 'Unable to detect a microphone. Usually your video camera will have an integrated microphone, but if not please attach and enable one.');
+  };
+  AudioNotFoundError.prototype = Error.prototype;
+
+  const AudioDeniedError = function(message) {
+    this.name = 'AudioDeniedError';
+    this.message = (message || 'Your browser is preventing access to your microphone. Please check your browser settings (usually an icon in the address bar) to enable access.');
+  };
+  AudioDeniedError.prototype = Error.prototype;
 
   const WebRtcBrowserTest = function(opts) {
 
@@ -12,11 +42,15 @@
       opts.mediaElementContainer = document.querySelector(opts.mediaElementContainer);
     }
     if (!opts.mediaElementContainer) {
-      throw customError('ParameterError', 'Missing required element parameter');
+      throw new ParameterError('Missing required element parameter. Tests can\'t continue.');
     }
 
     if (!opts.onVolumeChange) {
-      throw customError('ParameterError', 'Missing required volume callback parameter');
+      throw new ParameterError('Missing required volume callback parameter. Tests can\'t continue.');
+    }
+
+    if (!window.Promise) {
+      throw new BrowserNotSupportedError('Your browser doesn\'t support Promises. Tests can\'t continue.');
     }
 
     let videoElement = document.querySelector('#videoContainer > video');
@@ -58,7 +92,7 @@
         navigator.mozGetUserMedia ||
         navigator.webkitGetUserMedia;
       return hasGetUserMedia ? Promise.resolve() :
-        Promise.reject(customError('BrowserNotSupported', 'Your browser doesn\'t support WebRTC.'));
+        Promise.reject(new BrowserNotSupportedError('Your browser doesn\'t support WebRTC.'));
     };
 
     const startVideo = function() {
@@ -113,7 +147,7 @@
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         audioContext = new AudioContext();
       } catch (e) {
-        return Promise.reject(customError('BrowserNotSupported', 'Your browser doesn\'t support web audio.'));
+        return Promise.reject(new BrowserNotSupportedError('Your browser doesn\'t support web audio.'));
       }
       const listener = createVolumeListener(audioContext, opts.onVolumeChange);
       try {
@@ -125,10 +159,35 @@
       }
     };
 
+    const startAll = function() {
+      return checkBrowser().then(() => {
+        return startVideo().catch((err) => {
+          if (err.name === 'NotFoundError') {
+            throw new VideoNotFoundError();
+          } else if (err.name === 'NotAllowedError') {
+            throw new VideoDeniedError();
+          } else {
+            throw err;
+          }
+        });
+      }).then(() => {
+        return startAudio().catch((err) => {
+          if (err.name === 'NotFoundError') {
+            throw new AudioNotFoundError();
+          } else if (err.name === 'NotAllowedError') {
+            throw new AudioDeniedError();
+          } else {
+            throw err;
+          }
+        });
+      });
+    };
+
     return {
       checkBrowser,
       startVideo,
-      startAudio
+      startAudio,
+      startAll
     };
   };
 
