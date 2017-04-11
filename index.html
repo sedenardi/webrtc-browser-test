@@ -5,19 +5,28 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <style type="text/css" media="screen">
-
+    
     </style>
-    <script type="text/javascript" src="lib/webrtc-browser-test.min.js"></script>
+    <script type="text/javascript" src="lib/webrtc-browser-test.js"></script>
   </head>
   <body>
     <div id="app">
       <h1>WebRTC Browser Test Demo</h1>
       <p>
+        <div id="videoContainer">
 
+        </div>
+        <div id="volumeContainer">
+
+        </div>
       </p>
     </div>
     <script type="text/javascript">
+var browserTest = WebRtcBrowserTest({
+  videoElementContainer: '#videoContainer',
+  volumeMeterElement: '#volumeContainer',
 
+});
     </script>
   </body>
 </html>
