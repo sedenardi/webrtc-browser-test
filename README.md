@@ -61,3 +61,8 @@ Demo
 ----
 
 `npm run demo`
+
+License
+-------
+
+MIT
