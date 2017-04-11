@@ -1,0 +1,16 @@
+{
+  "name": "webrtc-browser-test",
+  "version": "1.0.0",
+  "description": "Test video and audio capabilities of the browser, verifying hardware works properly.",
+  "main": "lib/webrtc-browser-test.js",
+  "author": "Sanders DeNardi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sedenardi/webrtc-browser-test.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sedenardi/webrtc-browser-test/issues"
+  },
+  "homepage": "https://github.com/sedenardi/webrtc-browser-test"
+}
