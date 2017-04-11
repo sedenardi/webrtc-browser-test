@@ -41,12 +41,12 @@
     if (typeof opts.mediaElementContainer === 'string') {
       opts.mediaElementContainer = document.querySelector(opts.mediaElementContainer);
     }
-    if (!opts.mediaElementContainer) {
+    if (!opts.mediaElementContainer || !(opts.mediaElementContainer instanceof Element)) {
       throw new ParameterError('Missing required element parameter. Tests can\'t continue.');
     }
 
-    if (!opts.onVolumeChange) {
-      throw new ParameterError('Missing required volume callback parameter. Tests can\'t continue.');
+    if (opts.onVolumeChange && typeof opts.onVolumeChange !== 'function') {
+      throw new ParameterError('Volume callback parameter must be a function. Tests can\'t continue.');
     }
 
     if (!window.Promise) {
@@ -100,6 +100,14 @@
         return getUserMedia({ video: true }).then((stream) => {
           videoElement.srcObject = stream;
           return Promise.resolve();
+        }).catch((err) => {
+          if (err.name === 'NotFoundError') {
+            throw new VideoNotFoundError();
+          } else if (err.name === 'NotAllowedError') {
+            throw new VideoDeniedError();
+          } else {
+            throw err;
+          }
         });
       });
     };
@@ -109,6 +117,14 @@
         return getUserMedia({ audio: true }).then((stream) => {
           audioElement.srcObject = stream;
           return startVolume(stream);
+        }).catch((err) => {
+          if (err.name === 'NotFoundError') {
+            throw new AudioNotFoundError();
+          } else if (err.name === 'NotAllowedError') {
+            throw new AudioDeniedError();
+          } else {
+            throw err;
+          }
         });
       });
     };
@@ -161,25 +177,9 @@
 
     const startAll = function() {
       return checkBrowser().then(() => {
-        return startVideo().catch((err) => {
-          if (err.name === 'NotFoundError') {
-            throw new VideoNotFoundError();
-          } else if (err.name === 'NotAllowedError') {
-            throw new VideoDeniedError();
-          } else {
-            throw err;
-          }
-        });
+        return startVideo();
       }).then(() => {
-        return startAudio().catch((err) => {
-          if (err.name === 'NotFoundError') {
-            throw new AudioNotFoundError();
-          } else if (err.name === 'NotAllowedError') {
-            throw new AudioDeniedError();
-          } else {
-            throw err;
-          }
-        });
+        return startAudio();
       });
     };
 
