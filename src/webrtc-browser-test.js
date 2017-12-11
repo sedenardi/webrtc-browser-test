@@ -105,6 +105,8 @@
             throw new VideoNotFoundError();
           } else if (err.name === 'NotAllowedError') {
             throw new VideoDeniedError();
+          } else if (err.name === 'PermissionDeniedError') {
+            throw new VideoDeniedError();
           } else {
             throw err;
           }
@@ -121,6 +123,8 @@
           if (err.name === 'NotFoundError') {
             throw new AudioNotFoundError();
           } else if (err.name === 'NotAllowedError') {
+            throw new AudioDeniedError();
+          } else if (err.name === 'PermissionDeniedError') {
             throw new AudioDeniedError();
           } else {
             throw err;
