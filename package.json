@@ -1,6 +1,6 @@
 {
   "name": "webrtc-browser-test",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Test video and audio capabilities of the browser, verifying hardware works properly.",
   "main": "lib/webrtc-browser-test.js",
   "author": "Sanders DeNardi",
