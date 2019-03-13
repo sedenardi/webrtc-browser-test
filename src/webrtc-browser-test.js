@@ -120,6 +120,7 @@
       return checkBrowser().then(() => {
         return getUserMedia({ audio: true }).then((stream) => {
           audioElement.srcObject = stream;
+          audioElement.volume = 0;
           return startVolume(stream);
         }).catch((err) => {
           if (err.name === 'NotFoundError') {
@@ -189,6 +190,10 @@
       });
     };
 
+    const toggleVolume = function() {
+      audioElement.volume = audioElement.volume ? 0 : 1;
+    };
+
     const checkScreenSharing = function() {
       return !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
     };
@@ -218,6 +223,7 @@
       startVideo,
       startAudio,
       startAll,
+      toggleVolume,
       checkScreenSharing,
       startScreenSharing,
       endScreenSharing

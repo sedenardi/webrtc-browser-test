@@ -34,7 +34,8 @@
       <div id="volumeMeterContainer">
         <div id="volumeMeter"></div>
       </div>
-      <div id="screenShareButtons">
+      <div>
+        <button id="toggleVolumeBtn">Toggle Volume</button>
         <button id="startShareBtn">Start Sharing Screen</button>
         <button id="endShareBtn">End Sharing Screen</button>
       </div>
@@ -57,6 +58,7 @@ try {
   browserTest.startAll().then(() => {
     console.log('started');
   }).catch(setError);
+  document.getElementById('toggleVolumeBtn').addEventListener('click', browserTest.toggleVolume);
   document.getElementById('startShareBtn').addEventListener('click', () => {
     browserTest.startScreenSharing().catch(setError);
   });
