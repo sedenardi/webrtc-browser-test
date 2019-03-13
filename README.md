@@ -38,6 +38,9 @@ Options:
 * `startVideo()` - Requests local video access and displays it in the browser.
 * `startAudio()` - Requests local video access and outputs it to the speakers. Also begins outputting volume to the optional `onVolumeChange` callback.
 * `startAll()` - Run all the above tests.
+* `checkScreenSharing()` - Check whether the browser supports the `getDisplayMedia` method.
+* `startScreenSharing()` - Initiates screen sharing.
+* `endScreenSharing()` - Stops screen sharing and resumes using the camera.
 
 Example
 -------
@@ -56,6 +59,8 @@ browserTest.startAll().then(function() {
   console.log(err);
 });
 ```
+
+See `index.html` for full working example.
 
 Demo
 ----

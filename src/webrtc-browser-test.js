@@ -95,9 +95,11 @@
         Promise.reject(new BrowserNotSupportedError('Your browser doesn\'t support WebRTC.'));
     };
 
+    let cameraStream;
     const startVideo = function() {
       return checkBrowser().then(() => {
         return getUserMedia({ video: true }).then((stream) => {
+          cameraStream = stream;
           videoElement.srcObject = stream;
           return Promise.resolve();
         }).catch((err) => {
@@ -187,11 +189,38 @@
       });
     };
 
+    const checkScreenSharing = function() {
+      return !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+    };
+
+    let screenStream;
+    const startScreenSharing = function() {
+      if (!checkScreenSharing()) {
+        return Promise.reject(new BrowserNotSupportedError('Your browser doesn\'t support screen sharing.'));
+      }
+      return navigator.mediaDevices.getDisplayMedia({ video: true }).then((stream) => {
+        screenStream = stream;
+        videoElement.srcObject = screenStream;
+      }).catch(console.log);
+    };
+
+    const endScreenSharing = function() {
+      if (!screenStream) {
+        throw new Error('Screen sharing hasn\'t been started yet.');
+      }
+      videoElement.srcObject = cameraStream;
+      screenStream.getTracks().forEach(track => track.stop());
+      screenStream = null;
+    };
+
     return {
       checkBrowser,
       startVideo,
       startAudio,
-      startAll
+      startAll,
+      checkScreenSharing,
+      startScreenSharing,
+      endScreenSharing
     };
   };
 

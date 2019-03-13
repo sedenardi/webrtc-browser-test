@@ -8,6 +8,9 @@
 #message {
   padding: 10px;
 }
+#mediaContainer > video {
+  max-width: 640px;
+}
 #volumeMeterContainer {
   width: 100%;
   max-width: 640px;
@@ -25,37 +28,47 @@
   <body>
     <div id="app">
       <h1>WebRTC Browser Test Demo</h1>
-      <p>
-        <pre id="message">
-
-        </pre>
-        <div id="mediaContainer">
-        </div>
-        <div id="volumeMeterContainer">
-          <div id="volumeMeter"></div>
-        </div>
-      </p>
+      <pre id="message"></pre>
+      <div id="mediaContainer">
+      </div>
+      <div id="volumeMeterContainer">
+        <div id="volumeMeter"></div>
+      </div>
+      <div id="screenShareButtons">
+        <button id="startShareBtn">Start Sharing Screen</button>
+        <button id="endShareBtn">End Sharing Screen</button>
+      </div>
     </div>
     <script type="text/javascript">
-var message = document.getElementById('message');
+const message = document.getElementById('message');
+const setError = (err) => {
+  message.innerHTML = err.name + '\n' + err.message;
+  console.log(err);
+};
 try {
-  var meter = document.getElementById('volumeMeter');
-  var browserTest = WebRtcBrowserTest({
+  const meter = document.getElementById('volumeMeter');
+  const browserTest = WebRtcBrowserTest({
     mediaElementContainer: '#mediaContainer',
-    onVolumeChange: function(level) {
-      var pct = Math.ceil(level * 100);
+    onVolumeChange: (level) => {
+      const pct = Math.ceil(level * 100);
       meter.style.width = pct + '%';
     }
   });
-  browserTest.startAll().then(function() {
+  browserTest.startAll().then(() => {
     console.log('started');
-  }).catch(function(err) {
-    message.innerHTML = err.name + '\n' + err.message;
-    console.log(err);
+  }).catch(setError);
+  document.getElementById('startShareBtn').addEventListener('click', () => {
+    browserTest.startScreenSharing().catch(setError);
+  });
+  document.getElementById('endShareBtn').addEventListener('click', () => {
+    try {
+      browserTest.endScreenSharing();
+    } catch(err) {
+      setError(err);
+    }
   });
 } catch(err) {
-  message.innerHTML = err.name + '\n' + err.message;
-  console.log(err);
+  setError(err);
 }
     </script>
   </body>
