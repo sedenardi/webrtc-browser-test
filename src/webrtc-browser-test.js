@@ -116,11 +116,12 @@
       });
     };
 
+    const QUIET_VOLUME = 0.2;
     const startAudio = function() {
       return checkBrowser().then(() => {
         return getUserMedia({ audio: true }).then((stream) => {
           audioElement.srcObject = stream;
-          audioElement.volume = 0;
+          audioElement.volume = QUIET_VOLUME;
           return startVolume(stream);
         }).catch((err) => {
           if (err.name === 'NotFoundError') {
@@ -191,7 +192,7 @@
     };
 
     const toggleVolume = function() {
-      audioElement.volume = audioElement.volume ? 0 : 1;
+      audioElement.volume = audioElement.volume ? QUIET_VOLUME : 1;
     };
 
     const checkScreenSharing = function() {
