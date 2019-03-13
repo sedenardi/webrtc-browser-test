@@ -191,8 +191,8 @@
       });
     };
 
-    const toggleVolume = function() {
-      audioElement.volume = audioElement.volume ? QUIET_VOLUME : 1;
+    const adjustVolume = function(volume) {
+      audioElement.volume = volume;
     };
 
     const checkScreenSharing = function() {
@@ -224,7 +224,7 @@
       startVideo,
       startAudio,
       startAll,
-      toggleVolume,
+      adjustVolume,
       checkScreenSharing,
       startScreenSharing,
       endScreenSharing
