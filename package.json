@@ -1,6 +1,6 @@
 {
   "name": "webrtc-browser-test",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Test video and audio capabilities of the browser, verifying hardware works properly.",
   "main": "lib/webrtc-browser-test.js",
   "author": "Sanders DeNardi",
@@ -14,15 +14,17 @@
   },
   "homepage": "https://github.com/sedenardi/webrtc-browser-test",
   "devDependencies": {
-    "babel-eslint": "^7.2.1",
-    "babel-preset-es2015": "^6.24.1",
-    "eslint": "^3.19.0",
-    "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-babel": "^6.1.2",
-    "gulp-eslint": "^3.0.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^2.1.2",
-    "http-server": "^0.9.0"
+    "babel-eslint": "^10.0.1",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "eslint": "^5.12.1",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-eslint": "^5.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-uglify": "^3.0.1",
+    "http-server": "^0.11.1",
+    "terser": "^3.16.1"
   },
   "scripts": {
     "devServer": "http-server -c-1",

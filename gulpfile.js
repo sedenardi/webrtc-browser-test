@@ -2,15 +2,15 @@ const gulp = require('gulp');
 const babel = require('gulp-babel');
 const eslint = require('gulp-eslint');
 const rename = require('gulp-rename');
-const uglify = require('gulp-uglify');
+const terser = require('terser');
+const composer = require('gulp-uglify/composer');
+const uglify = composer(terser, console);
 
 gulp.task('transpile', () => {
   return gulp.src('./src/webrtc-browser-test.js')
     .pipe(eslint())
     .pipe(eslint.format())
-    .pipe(babel({
-      presets: ['es2015']
-    }))
+    .pipe(babel())
     .pipe(gulp.dest('./lib'));
 });
 
